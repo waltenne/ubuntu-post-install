@@ -230,7 +230,7 @@ ficando algo parecido com isso
 
 Após entender o funcionamento, você precisa configurar sua chave ssh para poder realizar o clone do repositório no github clique **[aqui](https://armitageweb.com.br/blog/como-configurar-acesso-ssh-para-o-git-no-bitbucket-linux)**, para poder configurar.
 
-### **mvn.ini** 
+### **mvn.ini**
 
 ```
 MVN_PROJECTS=() - Array com o nome do projeto/repositorio do Bitbucket, 
@@ -244,6 +244,7 @@ mas ela se torna diferente, pois aqui você vai preencher apenas com os dados
 dos repositórios que você deseja realizar o build da aplicação, utilizando o maven e o npm.
 
 Após entender o funcionamento, você precisa o **settings.xml** dentro da .m2, normalmente caso for utilizar esse script base aonde trabalha, normalmente a equipe disponibiliza um arquivo template para que seja utilizado.
+```
 
 [Maven Settings](https://www.baeldung.com/maven-settings-xml)
 
