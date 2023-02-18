@@ -1,0 +1,20 @@
+#!/bin/bash
+
+CONFIGURE_MODULE_NAME="modules.bash"
+
+# Funcção que configura o .bashrc, colocando os alias e no final criando os links simbólicos.
+function bashrc(){
+	clear 
+	CONFIGURE_MODULE_NAME_ZSHRC=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_ZSHRC} - Iniciando a Configuração do Bashrc"
+
+	sudo echo -ne "\n#Alias Configuration\n" >> ~/.zshrc
+
+    for project in "${BASHRC_ALIAS[@]}"
+    do
+		sudo echo "${project}" >> ~/.zshrc
+	done
+	
+	clear
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_ZSHRC} - Fim da Configuração do Zshrc"
+}

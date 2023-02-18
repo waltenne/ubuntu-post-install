@@ -1,0 +1,30 @@
+#!/bin/bash
+
+CONFIGURE_MODULE_NAME="modules.dotfiles"
+
+# Função que copia os arquivos necessários para o funcionamento do dotfiles.
+function copyfiles(){
+    clear 
+	CONFIGURE_MODULE_NAME_COPY_FILES=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_COPY_FILES} - Iniciando a copia dos arquivos."
+
+    rsync -azvP ${DIRECTORY_BASE}/dotfiles/* ~/.dotfiles/
+    rsync -azvP ${DIRECTORY_BASE}/modules/* ~/.dotfiles/bin/scripts/modules/
+    rsync -azvP ${DIRECTORY_BASE}/main ~/.dotfiles/bin/scripts/
+
+    echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_COPY_FILES} - Finalizando a copia dos arquivos."
+}
+
+# Função que prepara o dotfiles no sistema operacional.
+function symboliclinks(){
+    clear 
+	CONFIGURE_MODULE_NAME_SYMBOLIC_LINKS=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_SYMBOLIC_LINKS} - Iniciando a criação dos links simbolicos."
+
+	sudo ln -s ~/.dotfiles/.ssh ~/.ssh
+	sudo ln -s ~/.dotfiles/.aws ~/.aws
+	sudo ln -s ~/.dotfiles/.local/share/DBeaverData ~/.local/share/DBeaverData
+	sudo ln -s ~/.dotfiles/.local/share/remmina ~/.local/share/remmina
+
+    echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_SYMBOLIC_LINKS} - Finalizando a criação dos links simbolicos."
+}

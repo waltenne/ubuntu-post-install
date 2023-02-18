@@ -1,0 +1,40 @@
+#!/bin/bash
+
+CONFIGURE_MODULE_NAME="modules.zsh"
+
+# Funcção que instala o ZSH e algumas fontes, tentando também instalar o thema powerlevel10k.
+function configure(){
+	clear 
+	CONFIGURE_MODULE_NAME_ZSH_CONFIGURE=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_ZSH_CONFIGURE} - Iniciando a Configuração do ZSH"
+	wget -q 'https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Meslo.zip' -O /usr/share/fonts/Meslo.zip
+	wget -q 'https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/BitstreamVeraSansMono.zip' -O /usr/share/fonts/BitstreamVeraSansMono.zip
+	unzip -qo /usr/share/fonts/Meslo.zip -d /usr/share/fonts
+	unzip -qo /usr/share/fonts/BitstreamVeraSansMono.zip -d /usr/share/fonts
+	yes| rm /usr/share/fonts/BitstreamVeraSansMono.zip /usr/share/fonts/Meslo.zip
+	fc-cache -fv
+	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+	git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
+	sh -c "$(curl -fsSL https://git.io/zinit-install)"
+	sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=powerlevel10k\/powerlevel10k/' ~/.zshrc
+	sed -i 's/plugins=(git)/plugins=(pip zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_ZSH_CONFIGURE} - Fim da Configuração do ZSH"
+}
+
+# Funcção que configura o .zshrc, colocando os alias e no final criando os links simbólicos.
+function zshrc(){
+	clear 
+	CONFIGURE_MODULE_NAME_ZSHRC=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_ZSHRC} - Iniciando a Configuração do Zshrc"
+
+	echo -ne "\n#Alias Configuration\n" >> ~/.zshrc
+
+    for project in "${ZSH_ALIAS[@]}"
+    do
+		echo "${project}" >> ~/.zshrc
+	done
+	clear
+	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_ZSHRC} - Fim da Configuração do Zshrc"
+}

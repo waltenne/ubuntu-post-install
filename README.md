@@ -83,7 +83,6 @@ Manda instruções ao Kernel informando qual interpretador o mesmo irá chamar d
 - Use indentação
 - Use dotfiles
 
-
 *******
 ### Funções
 
@@ -229,6 +228,8 @@ ficando algo parecido com isso
    |-> REPOSITORY_WORKDIR diretorio root /opt/repository
 ```
 
+Após entender o funcionamento, você precisa configurar sua chave ssh para poder realizar o clone do repositório no github clique **[aqui](https://armitageweb.com.br/blog/como-configurar-acesso-ssh-para-o-git-no-bitbucket-linux)**, para poder configurar.
+
 ### **mvn.ini** 
 
 ```
@@ -242,7 +243,11 @@ A estrutura desse cara, pode ser baseada no bitbucket.ini com as mesma lógica,
 mas ela se torna diferente, pois aqui você vai preencher apenas com os dados 
 dos repositórios que você deseja realizar o build da aplicação, utilizando o maven e o npm.
 
-```
+Após entender o funcionamento, você precisa o **settings.xml** dentro da .m2, normalmente caso for utilizar esse script base aonde trabalha, normalmente a equipe disponibiliza um arquivo template para que seja utilizado.
+
+[Maven Settings](https://www.baeldung.com/maven-settings-xml)
+
+[Settings Reference](https://maven.apache.org/settings.html)
 
 ### **zsh.ini**
 
