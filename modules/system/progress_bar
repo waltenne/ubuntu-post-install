@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Replace value of chars
+# for diferents effects:
+# Var. | Val.
+# -----------
+# chars='\|/'
+# chars='-+'
+# chars='_-='
+# chars='$#&'
+chars='⡿⣟⣯⣷⣾⣽⣻⢿'
+sc=0
+animate() {
+   printf "\r\b${chars:sc++:1} $1"
+   ((sc==${#chars})) && sc=0
+}
+
+_load(){
+  while :;do
+    animate "$1"
+  done & trap "kill $!" EXIT
+  eval "$2"
+  kill $! && trap " " EXIT 
+}

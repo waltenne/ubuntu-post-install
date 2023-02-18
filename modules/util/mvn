@@ -1,0 +1,95 @@
+#!/bin/bash
+
+PACKAGE_MODULE_NAME="modules.mvn"
+
+# Realiza a limpeza da m2.
+function clean.m2(){
+    clear 
+	PACKAGE_MODULE_NAME_CLEAN_M2=${PACKAGE_MODULE_NAME}.${FUNCNAME[0]}
+    COMMAND_BASE_CLEAN_M2=$( echo "Insira o comando que realiza a limpeza da sua m2." )
+    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_CLEAN_M2} - Limpando o Diretorio M2.\n" && ${COMMAND_BASE_CLEAN_M2}
+    if [ $? -ne 0 ]; then
+        echo -ne "[WARN $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_CLEAN_M2} - Limpeza nao realizada.\n"
+        exit 1
+    else
+        echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_CLEAN_M2} - Limpeza realizada com sucesso.\n"
+    fi
+}
+
+# Função que realiza os builds dos projetos 
+function run.builds(){
+    clear 
+	PACKAGE_MODULE_NAME_BUILDS=${PACKAGE_MODULE_NAME}.${FUNCNAME[0]}
+    BRANCH_DEFAULT='develop'
+    BRANCH=${2:-$BRANCH_DEFAULT}
+
+    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Iniciando build dos projetos.\n"
+    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Voce tem interesse em Limpar a M2 antes de iniciar? (Ss/Nn) " && read OPTS
+    if [[ $OPTS =~ ^[YysS]$ ]]; then
+        clean.m2
+    fi
+
+    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Voce tem interesse em Pular todos os testes? (Ss/Nn) " && read OPTS
+    if [[ $OPTS =~ ^[YysS]$ ]]; then
+        MVN_COMMAND=(mvn clean install -q -U -Dskip.integration.tests=true -Dmaven.test.skip=true)
+    elif [[ $OPTS =~ ^[Nn]$ ]]; then
+        MVN_COMMAND=(mvn clean install -q -U -Dskip.integration.tests=false -Dmaven.test.skip=false)
+    fi  
+
+    for (( a,b; a<${#MVN_PROJECTS[@]}, b<${#MVN_NODE_PROJECT[@]}; a++, b++ ));
+    do
+        if [[ -d $REPOSITORY_WORKDIR/${MVN_PROJECTS[$a]} ]]; then
+            START=$(date +%s)
+            PARENT_VERSION=$( xmlstarlet sel -t -v "/_:project/_:version" -n "$REPOSITORY_WORKDIR/${MVN_PROJECTS[$a]}/pom.xml" )
+            PROJECT_NAME=$( echo "${MVN_PROJECTS[$a]}" | cut -d '/' -f2 )
+            echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - ---------------------------------------------\n"
+            echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Projeto: ${PROJECT_NAME}\n"
+            echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Branch: ${BRANCH}\n"
+            echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Version: ${PARENT_VERSION}\n"
+            cd "${REPOSITORY_WORKDIR}/${MVN_PROJECTS[$a]}"
+            BRANCH_EXIST=$( git ls-remote origin "${BRANCH}" )
+            if [[ -z $BRANCH_EXIST ]]; then
+                echo -ne "[WARN $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - A Branch ${BRANCH} não existe no repositório ${PROJECT_NAME}.\n"
+                echo -ne "[WARN $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Irei parar o processo.\n"
+                exit
+            else
+                git checkout "${BRANCH}" -q
+                if [[ "${MVN_PROJECTS[$a]}" == "${MVN_NODE_PROJECT[$b]}" ]]; then
+                    npm install --force --silent
+                    if [ $? -ne 0 ]; then
+                        echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Falha durante o build do projeto: ${PROJECT_NAME}.\n"
+                        echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - ---------------------------------------------\n"
+                        exit 1
+                    else
+                        npm run build-prod --silent
+                        if [ $? -ne 0 ]; then
+                            echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME} - Falha durante o build do projeto: ${PROJECT_NAME}.\n"
+                            echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME} - ---------------------------------------------\n"
+                            exit 1
+                        fi
+                    fi
+                else
+                    "${MVN_COMMAND[@]}"
+                fi
+                if [ $? -ne 0 ]; then
+                    echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] Falha durante o build do projeto: ${PROJECT_NAME}.\n"
+                    echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - ---------------------------------------------\n"
+                    exit 1
+                else
+                    END=$(date +%s)
+                    DIFF=$(( $END - $START ))
+                    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Tempo de Build: ${DIFF} segundos\n"
+                    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Build do projeto: ${PROJECT_NAME} finalizado com sucesso\n"
+                    
+                fi
+                cd "${REPOSITORY_WORKDIR}"
+            fi
+        else
+            echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Nao identificado a existencia do projeto $REPOSITORY_WORKDIR/${MVN_PROJECTS[$a]}.\n"
+            echo -ne "[ERROR $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - ---------------------------------------------\n"
+        fi
+    done
+    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - Builds Finalizadas.\n"
+    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_NAME_BUILDS} - ---------------------------------------------\n"
+
+}

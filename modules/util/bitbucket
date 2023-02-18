@@ -1,0 +1,46 @@
+#!/bin/bash 
+BITBUCKET_MODULE_NAME="modules.bitbucket"
+
+# Função que realiza o clone dos repositórios, seguindo o padrão para o bitbucket, para clone utilizando o ssh
+function bclone(){
+    clear
+    BITBUCKET_MODULE_NAME_BCLONE=${BITBUCKET_MODULE_NAME}.${FUNCNAME[0]}
+    COMMAND_BASE_CLONE="git clone git@bitbucket.org:${WORKSPACE}"
+
+    for PROJECT in "${BITBUCKET_PROJECTS[@]}"
+    do
+        PROJECT_NAME=$(echo "${PROJECT}" | cut -d '/' -f1)
+        REPOSITORY=$(echo "${PROJECT}" | cut -d '/' -f2)
+        FULL_PATH_PROJET="${REPOSITORY_WORKDIR}/${PROJECT_NAME}"
+        FULL_PATH_REPOSITORY="${REPOSITORY_WORKDIR}/${PROJECT}"
+        [[ ! -d "${FULL_PATH_PROJET}" ]] && mkdir -p "${FULL_PATH_PROJET}"
+        if [[ -d "${FULL_PATH_REPOSITORY}" ]];
+        then
+            echo "[WARN $(date "+%Y-%m-%d %H:%M:%S")] - ${BITBUCKET_MODULE_NAME_BCLONE} - O repositorio ${REPOSITORY} ja existe nada sera feito"
+        else
+            echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${BITBUCKET_MODULE_NAME_BCLONE} - Clone - Projeto [$PROJECT_NAME] Repositorio [${REPOSITORY}]" && "${COMMAND_BASE_CLONE}/${REPOSITORY}.git" "${FULL_PATH_REPOSITORY}" 2>/dev/null
+        fi
+
+    done
+}
+
+# Função que realiza a atualização dos repositórios do bitbucket que formam baixados anteriormente.
+function bupdate(){
+    clear
+    BITBUCKET_MODULE_NAME_BUPDATE=${BITBUCKET_MODULE_NAME}.${FUNCNAME[0]}
+    COMMAND_BASE_UPDATE="git pull "
+    for PROJECT in "${BITBUCKET_PROJECTS[@]}"
+    do
+        PROJECT_NAME=$(echo "${PROJECT}" | cut -d '/' -f1)
+        REPOSITORY=$(echo "${PROJECT}" | cut -d '/' -f2)
+        FULL_PATH_PROJET="${REPOSITORY_WORKDIR}/${PROJECT_NAME}"
+        FULL_PATH_REPOSITORY="${REPOSITORY_WORKDIR}/${PROJECT}"
+        [[ ! -d "${FULL_PATH_PROJET}" ]] && mkdir -p "${FULL_PATH_PROJET}"
+        if [[ -d "${FULL_PATH_REPOSITORY}" ]];
+        then
+            echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${BITBUCKET_MODULE_NAME_BUPDATE} - Atualizando - Projeto [${PROJECT_NAME}] Repositorio [${REPOSITORY}]" && cd "${FULL_PATH_REPOSITORY}" && "${COMMAND_BASE_UPDATE}" > /dev/null
+        else
+            echo "[WARN $(date "+%Y-%m-%d %H:%M:%S")] - ${BITBUCKET_MODULE_NAME_BUPDATE} - O repositorio ${REPOSITORY} nao existe nada sera feito"
+        fi
+    done
+}
