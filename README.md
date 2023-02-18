@@ -185,7 +185,8 @@ Por exemplo **REPOSITORY_WORKDIR=/opt/repository**, ao realizar o clone dos repo
 ### **bashrc.ini** 
 
 ```
-BASHRC_ALIAS=() - Array para que você possa colocar os alias que serão cadastrados no bashrc
+BASHRC_ALIAS=() - Array para que você possa colocar os alias que 
+serão cadastradosno bashrc
 ```
 Por exemplo
 
@@ -231,18 +232,23 @@ ficando algo parecido com isso
 ### **mvn.ini** 
 
 ```
-MVN_PROJECTS=() - Array com o nome do projeto/repositorio do Bitbucket, que você deseja realizar os builds locais utilizando o comando mvn
+MVN_PROJECTS=() - Array com o nome do projeto/repositorio do Bitbucket, 
+que você deseja realizar os builds locais utilizando o comando mvn
 
-MVN_NODE_PROJECT - Nome do projeto/repositorio do Bitbucket, que você deseja realizar o build local utilizando o comando npm
+MVN_NODE_PROJECT - Nome do projeto/repositorio do Bitbucket,
+que você deseja realizar o build local utilizando o comando npm
 
-A estrutura desse cara, pode ser baseada no bitbucket.ini com as mesma lógica, mas ela se torna diferente, pois aqui você vai preencher apenas com os dados dos repositórios que você deseja realizar o build da aplicação, utilizando o maven e o npm.
+A estrutura desse cara, pode ser baseada no bitbucket.ini com as mesma lógica, 
+mas ela se torna diferente, pois aqui você vai preencher apenas com os dados 
+dos repositórios que você deseja realizar o build da aplicação, utilizando o maven e o npm.
 
 ```
 
 ### **zsh.ini**
 
 ```
-ZSHRC_ALIAS=() - Array para que você possa colocar os alias que serão cadastrados no zshrc
+ZSHRC_ALIAS=() - Array para que você possa colocar os alias
+que serão cadastrados no zshrc
 ```
 Por exemplo
 
@@ -279,8 +285,8 @@ Esse projeto foi estruturado da seguinte forma
 ./dotfiles/.local/share/DBeaverData - Diretório dos arquivos de configuração  DBeaver.
 ./dotfiles/.ssh/ - Diretório dos arquivos de configuração ssh.
 ./dotfiles/.vscode/ - Diretório dos arquivos de configuração do vscode.
-./dotfiles/bin/app - Diretório de binários de aplicativos, seja appimage dentre outros, que podem ser adicionados no alias
-./dotfiles/bin/script - Diretório de binários dos scripts, que podem ser adicionados no alias
+./dotfiles/bin/app - Diretório de binários de aplicativos.
+./dotfiles/bin/script - Diretório de binários dos scripts.
 ```
 
 *******
