@@ -200,7 +200,6 @@ Quando for configurado o bashrc, será adicionado o alias dps para o comando **s
 
 ### **bitbucket.ini** 
 
-
 ```
 WORKSPACE=  - Nome do workspace no Bitbucket
 PROJECTS=() - Array com o nome do projeto/repositorio no Bitbucket.
@@ -244,7 +243,6 @@ que você deseja realizar o build local utilizando o comando npm
 A estrutura desse cara, pode ser baseada no bitbucket.ini com as mesma lógica, 
 mas ela se torna diferente, pois aqui você vai preencher apenas com os dados 
 dos repositórios que você deseja realizar o build da aplicação, utilizando o maven e o npm.
-
 ```
 
 Após entender o funcionamento, você precisa o **settings.xml** dentro da .m2, normalmente caso for utilizar esse script base aonde trabalha, normalmente a equipe disponibiliza um arquivo template para que seja utilizado.
@@ -252,6 +250,7 @@ Após entender o funcionamento, você precisa o **settings.xml** dentro da .m2, 
 [Maven Settings](https://www.baeldung.com/maven-settings-xml)
 
 [Settings Reference](https://maven.apache.org/settings.html)
+
 
 ### **zsh.ini**
 
