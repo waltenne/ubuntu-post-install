@@ -250,6 +250,7 @@ dos repositórios que você deseja realizar o build da aplicação, utilizando o
 Após entender o funcionamento, você precisa o **settings.xml** dentro da .m2, normalmente caso for utilizar esse script base aonde trabalha, normalmente a equipe disponibiliza um arquivo template para que seja utilizado.
 
 [Maven Settings](https://www.baeldung.com/maven-settings-xml)
+
 [Settings Reference](https://maven.apache.org/settings.html)
 
 ### **zsh.ini**
