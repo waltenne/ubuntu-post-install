@@ -8,17 +8,14 @@ PACKAGE_MODULE_MAIN="modules.main"
 source ${DIRECTORY_BASE}/config/app.ini
 source ${DIRECTORY_BASE}/config/bitbucket.ini
 source ${DIRECTORY_BASE}/config/mvn.ini
-source ${DIRECTORY_BASE}/config/svn.ini
 source ${DIRECTORY_BASE}/config/zsh.ini
 
 # Importa o modulo PostInstall
 source ${DIRECTORY_BASE}/modules/postinstall/zsh
-source ${DIRECTORY_BASE}/modules/postinstall/bash
 source ${DIRECTORY_BASE}/modules/postinstall/packages
 source ${DIRECTORY_BASE}/modules/postinstall/dotfiles
 
 # Importa o modulo Sistema
-source ${DIRECTORY_BASE}/modules/system/progress_bar
 source ${DIRECTORY_BASE}/modules/system/os
 
 # Importa o modulo Utilidade
@@ -36,20 +33,11 @@ function postinstall(){
     basic.packages
     repositories
     packages
-    echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_MAIN_POST_INSTALL} - Voce tem interesse em Configurar o Zsh? (Ss/Nn) " && read OPTS
-    if [[ $OPTS =~ ^[YysS]$ ]]; then
-      zsh
-      zsh.configure
-      zshrc
-      copyfiles
-      symboliclinks
-    else
-      bash
-      copyfiles
-      symboliclinks
-      echo -ne "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${PACKAGE_MODULE_MAIN_POST_INSTALL} - fim da execucao"
-      exit
-    fi
+    zsh
+    zsh.configure
+    zshrc
+    copyfiles
+    symboliclinks
 }
 
 # Funções que podem ser acionadas pelo script main

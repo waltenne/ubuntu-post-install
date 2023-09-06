@@ -7,10 +7,8 @@ function copyfiles(){
     clear 
 	CONFIGURE_MODULE_NAME_COPY_FILES=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
 	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_COPY_FILES} - Iniciando a copia dos arquivos."
-
+	mkdir ~/.dotfiles/
     rsync -azvP ${DIRECTORY_BASE}/dotfiles/* ~/.dotfiles/
-    rsync -azvP ${DIRECTORY_BASE}/modules/* ~/.dotfiles/bin/scripts/modules/
-    rsync -azvP ${DIRECTORY_BASE}/main ~/.dotfiles/bin/scripts/
 
     echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_COPY_FILES} - Finalizando a copia dos arquivos."
 }
@@ -21,10 +19,36 @@ function symboliclinks(){
 	CONFIGURE_MODULE_NAME_SYMBOLIC_LINKS=${CONFIGURE_MODULE_NAME}.${FUNCNAME[0]}
 	echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_SYMBOLIC_LINKS} - Iniciando a criação dos links simbolicos."
 
-	sudo ln -s ~/.dotfiles/.ssh ~/.ssh
-	sudo ln -s ~/.dotfiles/.aws ~/.aws
-	sudo ln -s ~/.dotfiles/.local/share/DBeaverData ~/.local/share/DBeaverData
-	sudo ln -s ~/.dotfiles/.local/share/remmina ~/.local/share/remmina
+	rm -rf ~/.aws
+	rm -rf ~/.docker
+	rm -rf ~/.ssh
+	rm -rf ~/.local/share/DBeaverData
+	rm -rf ~/.local/share/remmina
+	rm -rf ~/.icons
+	rm -rf ~/.themes
+	rm -rf ~/.m2
+	rm -rf ~/.oh-my-zsh
+	rm -rf ~/.spotinst
+	rm -rf ~/.ssh
+	rm -rf ~/powerlevel10k
+	rm -rf ~/.zshrc
+
+	ln -s ~/.dotfiles/.aws ~/.aws
+	ln -s ~/.dotfiles/.fonts ~/.fonts 
+	ln -s ~/.dotfiles/.docker ~/.docker
+	ln -s ~/.dotfiles/.local/share/DBeaverData ~/.local/share/DBeaverData
+	ln -s ~/.dotfiles/.local/shar/remmina ~/.local/share/remmina
+	ln -s ~/.dotfiles/.icons ~/.icons
+	ln -s ~/.dotfiles/.themes ~/.themes
+	ln -s ~/.dotfiles/.m2 ~/.m2
+	ln -s ~/.dotfiles/.oh-my-zsh ~/.oh-my-zsh
+	ln -s ~/.dotfiles/.spotinst ~/.spotinst
+	ln -s ~/.dotfiles/.ssh ~/.ssh
+	ln -s ~/.dotfiles/.subversion ~/.subversion
+	ln -s ~/.dotfiles/.zshrc ~/.zshrc
+	ln -s ~/.dotfiles/powerlevel10k ~/powerlevel10k
+	ln -s ~/.dotfiles/.vscode ~/.vscode
+	ln -s ~/.dotfiles/.gitconfig ~/.gitconfig
 
     echo "[INFO $(date "+%Y-%m-%d %H:%M:%S")] - ${CONFIGURE_MODULE_NAME_SYMBOLIC_LINKS} - Finalizando a criação dos links simbolicos."
 }

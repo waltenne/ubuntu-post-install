@@ -155,12 +155,10 @@ Atualmente o Script foi pensado para ter as seguintes funções
 
     - **packages** - Instalação dos Pacotes do SO.
    - **zsh** - Configuração do zsh.
-   - **bashrc** - Configuração do bashrc.
 
 2. **System**, servirá para utilitários do sistema
 
     - **os** - Atualização do SO.
-    - **progress_bar** - Barra de Progresso, utilizado no módulo packages.
 
 3. **Util**, servirá para utilitários do sistema
 
